@@ -4,7 +4,7 @@ The canonical Git marketplace for reusable Codex skills that contain no company-
 
 ## Companion repository
 
-The team-only companion is [`leikunx/skills-private`](https://github.com/leikunx/skills-private). The installable plugin is `skills-shared`, declared in `.agents/plugins/marketplace.json` and packaged under `plugins/skills-shared/`.
+The team-only companion is [`leikunx/skills-private`](https://github.com/leikunx/skills-private). The installable plugin is `skills-shared`, declared in `.agents/plugins/marketplace.json`; its `.codex-plugin/` manifest and `skills/` directory are at this repository's root.
 
 ## Placement rule
 
@@ -21,4 +21,4 @@ codex plugin add skills-shared@skills-shared
 codex plugin add skills-private@skills-private
 ```
 
-For later updates, refresh the marketplaces, reinstall the changed plugin, and begin a new Codex session. `codex-m365` automates that workstation flow.
+For later updates, run `codex-m365`. Before it refreshes and reinstalls the plugins, it safely commits and pushes non-ignored changes in this repository and its private companion. It blocks likely secret files, merge divergence, missing upstream branches, or failed Git operations rather than overwriting or force-pushing.
