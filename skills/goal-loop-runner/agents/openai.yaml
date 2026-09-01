@@ -1,0 +1,4 @@
+interface:
+  display_name: "Goal Loop Runner"
+  short_description: "Evidence-gated goal iterations with durable state"
+  default_prompt: "Use $goal-loop-runner to pursue this goal iteratively, preserve state, verify each cycle, and stop only with evidence or a stated boundary."
