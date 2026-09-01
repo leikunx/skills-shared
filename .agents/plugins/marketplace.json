@@ -1,0 +1,20 @@
+{
+  "name": "skills-shared",
+  "interface": {
+    "displayName": "Skills Shared"
+  },
+  "plugins": [
+    {
+      "name": "skills-shared",
+      "source": {
+        "source": "local",
+        "path": "./plugins/skills-shared"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

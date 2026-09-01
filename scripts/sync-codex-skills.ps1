@@ -10,13 +10,13 @@ param(
 $ErrorActionPreference = 'Stop'
 $publicRepository = Split-Path -Parent $PSScriptRoot
 $repositoriesRoot = Split-Path -Parent $publicRepository
-$privateRepository = Join-Path $repositoriesRoot 'private'
+$privateRepository = Join-Path $repositoriesRoot 'skills-private'
 $codexHomePath = if ([string]::IsNullOrWhiteSpace($env:CODEX_HOME)) { Join-Path $env:USERPROFILE '.codex' } else { $env:CODEX_HOME }
 $targetSkills = if ([string]::IsNullOrWhiteSpace($Target)) { Join-Path $codexHomePath 'skills' } else { $Target }
 
 foreach ($repository in @($publicRepository, $privateRepository)) {
     if (-not (Test-Path -LiteralPath (Join-Path $repository '.git'))) {
-        throw "Expected a Git repository at $repository. Clone public and private as sibling folders."
+        throw "Expected a Git repository at $repository. Clone skills-shared and skills-private as sibling folders."
     }
     if ($Update) {
         $changes = @(git -C $repository status --porcelain)
@@ -30,7 +30,8 @@ foreach ($repository in @($publicRepository, $privateRepository)) {
 
 $sourceSkills = @()
 foreach ($repository in @($publicRepository, $privateRepository)) {
-    $skillsDirectory = Join-Path $repository 'skills'
+$pluginName = if ($repository -eq $publicRepository) { 'skills-shared' } else { 'skills-private' }
+    $skillsDirectory = Join-Path $repository "plugins\\$pluginName\\skills"
     if (Test-Path -LiteralPath $skillsDirectory) {
         $sourceSkills += Get-ChildItem -LiteralPath $skillsDirectory -Directory | ForEach-Object {
             [pscustomobject]@{ Name = $_.Name; Path = $_.FullName; Repository = $repository }

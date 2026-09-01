@@ -1,10 +1,10 @@
-# Public Codex Skills
+# Shared Codex Skills Marketplace
 
-The canonical source for reusable Codex skills that contain no company-internal source, tenant details, service URLs, credentials, or customer information.
+The canonical Git marketplace for reusable Codex skills that contain no company-internal source, tenant details, service URLs, credentials, or customer information.
 
 ## Companion repository
 
-The team-only companion is [`leikunx/private`](https://github.com/leikunx/private). Both repositories are synchronized by `scripts/sync-codex-skills.ps1` in this repository. The script installs their `skills/` folders into the normal Codex skills directory without silently replacing a locally modified skill.
+The team-only companion is [`leikunx/skills-private`](https://github.com/leikunx/skills-private). The installable plugin is `skills-shared`, declared in `.agents/plugins/marketplace.json` and packaged under `plugins/skills-shared/`.
 
 ## Placement rule
 
@@ -12,10 +12,13 @@ Put a skill here only when its instructions, examples, references, and scripts a
 
 ## Use on a workstation
 
-Clone this repository next to its private companion, then run:
+Register both Git marketplaces once:
 
 ```powershell
-.\scripts\sync-codex-skills.ps1 -Mode Apply -Update
+codex plugin marketplace add leikunx/skills-shared --ref main
+codex plugin marketplace add leikunx/skills-private --ref main
+codex plugin add skills-shared@skills-shared
+codex plugin add skills-private@skills-private
 ```
 
-The workstation launcher can perform that sync before starting Codex with its configured arguments.
+For later updates, refresh the marketplaces, reinstall the changed plugin, and begin a new Codex session. `codex-m365` automates that workstation flow.

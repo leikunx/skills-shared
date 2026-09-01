@@ -1,0 +1,18 @@
+{
+  "name": "skills-shared",
+  "version": "0.1.0",
+  "description": "Reusable Codex skills safe to share outside company projects.",
+  "author": {
+    "name": "Kun Lei"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Skills Shared",
+    "shortDescription": "Reusable shared Codex skills.",
+    "longDescription": "Installs generic, non-enterprise Codex workflows from the shared Git marketplace.",
+    "developerName": "Kun Lei",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Help me use the shared Codex skills."
+  }
+}
