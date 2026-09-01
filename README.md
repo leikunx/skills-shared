@@ -18,4 +18,4 @@ Clone this repository next to its private companion, then run:
 .\scripts\sync-codex-skills.ps1 -Mode Apply -Update
 ```
 
-The `codex-m365` launcher installed on this workstation performs that sync before starting `codex --yolo`.
+The workstation launcher can perform that sync before starting Codex with its configured arguments.
