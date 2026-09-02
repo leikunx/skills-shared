@@ -1,0 +1,3 @@
+interface:
+  display_name: "Playwright Extension Health Check"
+  short_description: "Verify the local browser extension connection"

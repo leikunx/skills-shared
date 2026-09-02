@@ -1,4 +1,0 @@
-interface:
-  display_name: "Loop"
-  short_description: "Iterate work and verification until completion"
-  default_prompt: "Use $loop to work iteratively on this task, verifying each cycle and stopping only when the success condition is proven."
