@@ -68,6 +68,12 @@ Before the first substantive action, establish:
 
 Create the state file from [the state template](references/state-template.md) when needed. At the start of each iteration, read it and the applicable project instructions. At the end, record only facts: action, outcome, evidence, blockers, and the next action.
 
+## Browser automation default
+
+When an iteration requires browser automation, first check whether Playwright Extension MCP tools are available in the current session. When they are available, use Playwright Extension MCP for the initial browser action and collect its result as evidence. Use another browser mechanism only when the user explicitly requests it, the extension is unavailable or disconnected, or the task requires a capability it cannot provide; record that reason in the goal state before continuing.
+
+This preference applies only to browser automation. It does not require browser tooling for non-browser work, bypass user authorization, or replace the task's stated safety boundary.
+
 ## Evidence-driven self-evolution
 
 For long-running work, improve the workflow through evidence, not unconstrained self-critique. Keep information in three layers:
