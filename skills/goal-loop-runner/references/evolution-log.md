@@ -17,3 +17,11 @@ This log records user-directed operating requirements and reusable improvements 
 - **Evidence:** This is an explicit user-established operating convention; the skill already recognized fuzzy and voice-transcribed input but did not make speech-to-text the default input model or specify what may be retained.
 - **Scope:** Applies to interpretation before goal work. Confirmed corrections are task facts in goal state; only the stable convention is reusable guidance. It does not authorize an inferred external action or change a safety boundary.
 - **Rollback condition:** If the default repeatedly produces a material misinterpretation, restrict it to explicitly marked voice input and retain the clarification gate for consequential ambiguity.
+
+## 2026-09-03 — User-directed unattended pursuit windows
+
+- **Trigger:** The user established a stable operating requirement: when they invoke this skill while away or asleep for a long period, the agent should continue safe, evidence-driven exploration through recoverable browser and process failures instead of ending at the first interruption.
+- **Exact change:** Added `Unattended pursuit windows`: record a stated execution window and cadence; use an external scheduler for bounded jobs that share goal state; require fresh browser/process/remote inspection and a materially different recovery action after failure; keep observing genuine external prerequisites without bypassing authentication, credentials, payment confirmation, or other authorization.
+- **Evidence:** The existing skill already required evidence-driven iterations and a scheduler for recurring work, but lacked an explicit unattended-window policy or concrete recovery choices for a disconnected browser/session. This user-established requirement fills that operational gap while retaining existing blocked and authorization rules.
+- **Scope:** Applies only when the user explicitly requests unattended pursuit. It does not create a daemon by itself, authorize external mutations, accept charges, or override user authentication.
+- **Rollback condition:** If scheduled jobs create unbounded cost, duplicate work, or repeatedly poll a prerequisite without a credible state change, retain the same state file but lengthen/disable the cadence and narrow the rule to the affected task type after evidence review.
