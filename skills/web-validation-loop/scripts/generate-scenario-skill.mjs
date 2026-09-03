@@ -106,7 +106,6 @@ const adapterInstruction = adapter
 
 const skill = `---
 name: ${skillName}
-version: 0.1.0
 description: ${yamlString(`Run the accepted ${scenario.title} web-validation scenario and return assertion-level evidence. Use only for this scenario and revision-aware reruns.`)}
 ---
 
@@ -144,4 +143,3 @@ writeFileSync(join(skillDir, 'references', 'scenario.json'), `${JSON.stringify(s
 writeFileSync(join(skillDir, 'agents', 'openai.yaml'), openaiYaml)
 
 console.log(JSON.stringify({ skillName, skillDir, scenarioId: scenario.id, revision: scenario.revision, caseCount: scenario.testCases.length, adapter: adapter ?? null }, null, 2))
-

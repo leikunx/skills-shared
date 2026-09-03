@@ -1,6 +1,5 @@
 ---
 name: web-validation-loop
-version: 0.1.0
 description: Turn stored web-validation scenarios into scenario-specific skills and run evidence-gated browser feedback loops. Use when authoring a scenario, materializing its executor, or validating a web application from scenario configuration; do not use for unit-only testing.
 ---
 
