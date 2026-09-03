@@ -1,6 +1,5 @@
 ---
 name: goal-loop-runner
-version: 0.3.1
 description: "Run a long-horizon task as a goal-driven, stateful, evidence-gated iteration loop. Use for Goal mode, 'continue until done', recurring maintenance, or fuzzy voice-transcribed requests that need a reviewable goal contract."
 ---
 
@@ -73,6 +72,16 @@ Create the state file from [the state template](references/state-template.md) wh
 When an iteration requires browser automation, first check whether Playwright Extension MCP tools are available in the current session. When they are available, use Playwright Extension MCP for the initial browser action and collect its result as evidence. Use another browser mechanism only when the user explicitly requests it, the extension is unavailable or disconnected, or the task requires a capability it cannot provide; record that reason in the goal state before continuing.
 
 This preference applies only to browser automation. It does not require browser tooling for non-browser work, bypass user authorization, or replace the task's stated safety boundary.
+
+## Unattended pursuit windows
+
+When the user invokes this skill while saying they will be away, asleep, or unavailable for a stated period, treat that period as an explicit instruction to keep pursuing the active goal rather than to end at the first recoverable failure. Record the window end time, recurrence cadence, and the same goal-state path in the contract. Use an external scheduler to launch bounded, stateful jobs during that window; the skill itself does not create a daemon or keep an inactive chat turn alive.
+
+Each unattended job must read the state and first inspect the current browser, process, service, or remote state. After a failure, record the failed hypothesis and try the next materially different safe diagnostic or recovery action in that job. For browser work, examples include rechecking extension connectivity, listing/selecting available tabs, opening a fresh tab, waiting for page readiness, inspecting console/network evidence, and revisiting the relevant authenticated route. Do not repeat an unchanged failed action or stop solely because one page navigation, selector, or process start failed.
+
+Do not ask the user for routine implementation choices during the window when they can be discovered from existing resources or resolved with an already-authorized safe default. For a genuine external prerequisite—such as interactive sign-in, unavailable credentials, multifactor approval, a payment confirmation, or a product decision—record the exact evidence and minimum unblocking action, then keep the scheduler active and revalidate the prerequisite on later scheduled jobs until the window ends. Never bypass authentication, fabricate credentials, accept payment terms, or create a charge merely to avoid waiting.
+
+At the end of an unattended window, report the accepted changes, objective-gate evidence, failed and recovered attempts, any remaining external prerequisite, and the next scheduled or user action. Mark a goal blocked only under the normal repeated-blocker policy; an unavailable user during an explicitly requested unattended window is not a reason to abandon safe exploration.
 
 ## Evidence-driven self-evolution
 
