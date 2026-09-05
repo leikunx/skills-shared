@@ -29,13 +29,14 @@ scripts/send_wechat_message.sh "RECIPIENT" "MESSAGE"
 
 The script stores inputs only in a mode-`0700` temporary directory, deletes them on exit, and keeps only a mode-`0600` receipt containing hashes. The helper preserves and restores the clipboard. Temporary WeChat-window screenshots are processed locally with Apple Vision and immediately deleted.
 
-The native gate must complete this sequence before Return is allowed:
+The native gate must complete this sequence:
 
 1. Temporarily move an off-main-display WeChat window into a coordinate-safe main-display frame, preserving its original frame for restoration.
-2. Click the left sidebar Search field, replace its contents with the exact recipient, and OCR the bounded result band.
-3. Require one exact result, click it, and require the same exact name once in the conversation-title region.
-4. Click the editor, paste the exact message, and require one exact OCR match in the editor region.
-5. Write the hash-only one-attempt receipt before the single Return event, then restore the original window frame and clipboard.
+2. OCR-locate the left sidebar Search control, click it, replace its contents with the exact recipient, and require that exact text once inside the bounded Search-input region; ignore same-text UI outside that control.
+3. Require one exact recipient candidate across WeChat-owned search surfaces, preferring an independently rendered search popup when present and otherwise using the left conversation column. Refocus the verified Search input and press Return to select; no message may be staged at this point.
+4. Require the same exact name once in the conversation-title region. Mixed-script names may be assembled only from adjacent same-line OCR fragments whose complete normalized text is exact.
+5. Click the editor, paste the exact message, and require one exact OCR match in the editor region.
+6. Write the hash-only one-attempt receipt before the separate sending Return event, then restore the original window frame and clipboard.
 
 ## Result handling
 
@@ -44,3 +45,7 @@ The native gate must complete this sequence before Return is allowed:
 - If the script reports that a receipt exists after an error, the outcome is uncertain: do not retry because Return may already have occurred.
 - Do not take or retain screenshots outside the helper, print OCR text unrelated to the exact target, enumerate contacts, or read chat history.
 - Never loop sends. A new message requires a new explicit user request containing both inputs.
+
+## Evolution Contract
+
+Record task-local outcomes in the active goal state, not in this skill. Keep proposed improvements separate from validated lessons. Update these instructions or references only after a later no-send gate or authorized run proves an objective improvement, or when a stable safety/operational invariant is established. Record every self-update's trigger, exact change, evidence, scope, and rollback condition in [the evolution log](references/evolution-log.md), then validate the changed skill before relying on it. This never expands authorization or permits changes to unrelated files.
