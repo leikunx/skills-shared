@@ -20,6 +20,18 @@
 - Authoritative user amendments:
 - Next bounded action:
 
+## Unattended window (when applicable)
+
+- Window start/end/timezone:
+- Scheduler command or definition:
+- Scheduler id / current job id:
+- Cadence / maximum jobs:
+- Per-job timeout:
+- Active round lease / expiry:
+- Stale-claim recovery evidence:
+- Owned processes / readiness / log paths:
+- Cleanup or handoff owner:
+
 ## Iteration log
 
 | Cycle | Action | Gate and result | Decision |
