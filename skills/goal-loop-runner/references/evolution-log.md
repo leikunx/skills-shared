@@ -2,6 +2,14 @@
 
 This log records user-directed operating requirements and reusable improvements that have objective evidence or are stable safety/operational invariants. Per-goal hypotheses and one-off workarounds remain in the selected goal state's iteration log.
 
+## 2026-09-07 — Verified round packets and unattended handoff
+
+- **Trigger:** The user asked for a deep review of AMAP-ML/LongHorizon-Harness and an English, reusable version of a 12-hour sleep-window instruction.
+- **Exact change:** Added a compact round packet reconstructed from the original contract, accepted checkpoint, evidence, remaining work, failures, and user amendments; separated attempt, mutation-free verification, and checkpoint promotion; labeled failed/partial/self-reported output as untrusted until verified; strengthened bounded single-transition rounds and full-contract completion checks. Expanded unattended pursuit with one consolidated pre-window clarification, non-overlapping scheduler jobs, accepted-checkpoint recovery, and no blocking mid-window questions. Added `references/unattended-handoff.md` with the polished English prompt.
+- **Evidence:** LongHorizon-Harness commit `a1dd930` and its paper model task execution as explicit state management: fresh-context executors act on one bounded subtask, read-only auditors inspect real environment state, and only audited facts update the ledger. Its code rejects completion without a complete/clean/aligned audit, restores state/contract/audit history on resume, and preserves timeout output as recovery evidence. Thirteen platform-neutral prompt-contract tests passed locally. Native-Windows resume/hardening tests failed because the upstream secure no-follow filesystem primitive is unavailable, so the runtime itself was not adopted; the skill keeps its existing external-scheduler abstraction.
+- **Scope:** Applies to long-horizon and explicitly unattended goal runs. A separate verifier is preferred for complex or consequential work but is not mandatory when unavailable; the same agent may perform a dedicated no-mutation verification pass. This adds no authority and does not turn an inactive chat into a daemon.
+- **Rollback condition:** If the added trust bookkeeping consumes disproportionate effort on short tasks, narrow it to tasks spanning multiple material cycles. If scheduler jobs overlap, duplicate mutations, or increase cost without objective-gate gains, retain the checkpoint model but reduce cadence/round count and require a single active job.
+
 ## 2026-09-01 — Final-deliverable ownership and validated evolution
 
 - **Trigger:** The user established that they will specify the final deliverable, while the agent must autonomously pursue it through repeated, evidence-backed attempts rather than ending at the first failure.

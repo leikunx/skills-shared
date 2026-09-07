@@ -8,12 +8,17 @@
 - State path:
 - Limits and approval boundaries:
 
-## Current status
+## Current round packet
 
-- Completed:
+- Contract version:
+- Accepted checkpoint:
+- Evidence supporting checkpoint:
 - In progress:
+- Untrusted/rejected:
+- Remaining work:
 - Blockers:
-- Next smallest action:
+- Authoritative user amendments:
+- Next bounded action:
 
 ## Iteration log
 

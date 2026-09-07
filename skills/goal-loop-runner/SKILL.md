@@ -1,6 +1,6 @@
 ---
 name: goal-loop-runner
-description: "Run a long-horizon task as a goal-driven, stateful, evidence-gated iteration loop. Use for Goal mode, 'continue until done', recurring maintenance, or fuzzy voice-transcribed requests that need a reviewable goal contract."
+description: "Run a long-horizon task as a goal-driven, stateful, evidence-gated iteration loop. Use for Goal mode, 'continue until done', recurring or unattended pursuit windows, or fuzzy voice-transcribed requests that need a reviewable goal contract."
 ---
 
 # Goal Loop Runner
@@ -67,6 +67,18 @@ Before the first substantive action, establish:
 
 Create the state file from [the state template](references/state-template.md) when needed. At the start of each iteration, read it and the applicable project instructions. At the end, record only facts: action, outcome, evidence, blockers, and the next action.
 
+## Round packet and checkpoint trust
+
+Start every iteration by reconstructing a compact round packet from the original objective and active contract, the latest accepted checkpoint and its evidence, remaining work, relevant failure or rejection evidence, and authoritative user amendments. Do not use a growing raw transcript as task state. Raw trajectories, tool logs, executor claims, partial output, and timed-out work may help diagnosis, but they are not accepted progress by themselves.
+
+Keep attempt, verification, and checkpoint decisions distinct:
+
+1. **Attempt:** perform one bounded action that targets one dominant state change.
+2. **Verification:** inspect the real file, application, browser, service, or other final-state carrier against the original contract and the action's gate. Treat the action report only as a claim.
+3. **Checkpoint:** promote only independently supported facts and artifacts into accepted state. Put failed, ambiguous, contaminated, or not-yet-verified output under `Untrusted/rejected` with the evidence needed for recovery; never overwrite the last accepted checkpoint with it.
+
+For complex or consequential work, prefer a separate reviewer or verifier when available. Otherwise perform a dedicated verification pass that makes no task-state mutations. Reconstruct the important acceptance constraints from the original request during that pass so contract drift, an incomplete last subtask, or an easier proxy cannot become the completion standard. Goal state and run logs are execution records, not substitutes for the user's requested deliverable.
+
 ## Browser automation default
 
 When an iteration requires browser automation, first check whether Playwright Extension MCP tools are available in the current session. When they are available, use Playwright Extension MCP for the initial browser action and collect its result as evidence. Use another browser mechanism only when the user explicitly requests it, the extension is unavailable or disconnected, or the task requires a capability it cannot provide; record that reason in the goal state before continuing.
@@ -75,11 +87,13 @@ This preference applies only to browser automation. It does not require browser 
 
 ## Unattended pursuit windows
 
-When the user invokes this skill while saying they will be away, asleep, or unavailable for a stated period, treat that period as an explicit instruction to keep pursuing the active goal rather than to end at the first recoverable failure. Record the window end time, recurrence cadence, and the same goal-state path in the contract. Use an external scheduler to launch bounded, stateful jobs during that window; the skill itself does not create a daemon or keep an inactive chat turn alive.
+When the user invokes this skill while saying they will be away, asleep, or unavailable for a stated period, read and follow [the unattended handoff protocol](references/unattended-handoff.md). Before the window begins, present the goal contract and consolidate every material uncertainty that truly requires the user into one clarification message. Record the confirmed window start/end with timezone, recurrence cadence, job/round limit, verification gate, and the same goal-state path. Once the user confirms the contract or explicitly starts the window, do not send blocking questions during it.
+
+Treat the stated period as an instruction to keep pursuing the active goal rather than to end at the first recoverable failure. Use an external scheduler to launch bounded, stateful jobs during that window; the skill itself does not create a daemon or keep an inactive chat turn alive. Prevent overlapping jobs from acting on the same mutable target unless concurrency is explicitly safe. Each job claims one round, rebuilds the compact round packet, and starts from the last accepted checkpoint rather than from an earlier executor claim.
 
 Each unattended job must read the state and first inspect the current browser, process, service, or remote state. After a failure, record the failed hypothesis and try the next materially different safe diagnostic or recovery action in that job. For browser work, examples include rechecking extension connectivity, listing/selecting available tabs, opening a fresh tab, waiting for page readiness, inspecting console/network evidence, and revisiting the relevant authenticated route. Do not repeat an unchanged failed action or stop solely because one page navigation, selector, or process start failed.
 
-Do not ask the user for routine implementation choices during the window when they can be discovered from existing resources or resolved with an already-authorized safe default. For a genuine external prerequisite—such as interactive sign-in, unavailable credentials, multifactor approval, a payment confirmation, or a product decision—record the exact evidence and minimum unblocking action, then keep the scheduler active and revalidate the prerequisite on later scheduled jobs until the window ends. Never bypass authentication, fabricate credentials, accept payment terms, or create a charge merely to avoid waiting.
+Do not ask the user for routine implementation choices during the window when they can be discovered from existing resources or resolved with an already-authorized safe default. For a genuine external prerequisite—such as interactive sign-in, unavailable credentials, multifactor approval, a payment confirmation, or a product decision—do not fabricate an answer or wait inside a job. Record the exact evidence and minimum unblocking action, continue any independent safe work, and let later jobs revalidate the prerequisite until the window ends. Never bypass authentication, fabricate credentials, accept payment terms, or create a charge merely to avoid waiting.
 
 At the end of an unattended window, report the accepted changes, objective-gate evidence, failed and recovered attempts, any remaining external prerequisite, and the next scheduled or user action. Mark a goal blocked only under the normal repeated-blocker policy; an unavailable user during an explicitly requested unattended window is not a reason to abandon safe exploration.
 
@@ -115,12 +129,13 @@ This skill records task-local outcomes in the selected goal state, not in this f
 
 For every cycle:
 
-1. Read the active goal and selected state.
-2. Choose the smallest action that can improve the objective.
-3. Execute it, then run the defined gate (tests, build, lint, data check, visual check, or another stated proof).
-4. Inspect the resulting diff or artifact. Update state with the gate result.
-5. When a failure or blocker changes the approach, record its hypothesis, evidence, and revised action; promote only later-validated lessons.
-6. Continue only if a specific next action has a credible path to improvement. Do not repeat an unchanged failed action.
+1. Read the active goal, applicable project instructions, and selected state; rebuild the compact round packet from the last accepted checkpoint.
+2. Choose the smallest action that can produce one dominant, observable state transition.
+3. Execute it within the current round budget, preserving partial output as untrusted evidence if execution fails or times out.
+4. Run a distinct verification pass using the defined gate (tests, build, lint, data check, visual check, or another stated proof) against the real final-state carrier and original contract.
+5. Inspect the resulting diff or artifact. Promote verified facts into the accepted checkpoint; keep rejected or uncertain output explicitly untrusted.
+6. When a failure or blocker changes the approach, record its hypothesis, evidence, and revised action; promote only later-validated lessons.
+7. Continue only if a specific next action has a credible path to improvement. Do not repeat an unchanged failed action. If the remaining budget cannot honestly reach the full gate, pursue the most complete verifiable action or report the exact boundary instead of spending the last round on a knowingly insufficient prerequisite.
 
 ## Final-deliverable ownership
 
