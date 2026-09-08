@@ -1,0 +1,4 @@
+interface:
+  display_name: "Architecture Health Review"
+  short_description: "Evidence-backed architecture and readiness audit"
+  default_prompt: "Use $architecture-health-review to assess this component and produce receipt-backed findings."
