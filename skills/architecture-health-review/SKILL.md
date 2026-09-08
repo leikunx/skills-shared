@@ -49,7 +49,7 @@ If implementation is requested, preserve this report as the acceptance baseline,
 
 ## Provenance
 
-This Codex adaptation was independently written from general methods observed in the private `caifali_microsoft/cowork-engineering-skills` repository at commit `8823967117854eac8d5f53126c05b5574fe5beb1`, especially its architecture-cleanup evidence and counter-search patterns. No company-specific topology, identifiers, or source prose is included.
+This Codex adaptation was independently written from general evidence and counter-search methods reviewed during a private internal skill-corpus intake. Detailed source provenance remains in the non-public migration audit; no internal topology, identifiers, or source prose is included here.
 
 ## Evolution Contract
 

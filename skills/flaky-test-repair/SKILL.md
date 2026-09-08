@@ -48,7 +48,7 @@ Review the diff for reduced assertions, hidden retries, new global state, or pro
 
 ## Provenance
 
-This skill was independently adapted from general classification and evidence ideas in the private `caifali_microsoft/cowork-engineering-skills` repository at commit `8823967117854eac8d5f53126c05b5574fe5beb1`. Aether, Azure DevOps, fixed pipeline identifiers, and automatic-merge behavior were intentionally removed.
+This skill was independently adapted from general classification and evidence ideas reviewed during a private internal skill-corpus intake. Detailed source provenance remains in the non-public migration audit; internal systems, fixed pipeline identifiers, and automatic-merge behavior were intentionally excluded.
 
 ## Evolution Contract
 
