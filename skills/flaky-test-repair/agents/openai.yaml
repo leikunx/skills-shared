@@ -1,4 +1,0 @@
-interface:
-  display_name: "Flaky Test Repair"
-  short_description: "Classify and remove intermittent test failures"
-  default_prompt: "Use $flaky-test-repair to classify this intermittent failure and produce a verified minimal fix."

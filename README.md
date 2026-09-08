@@ -10,10 +10,9 @@ The team-only companion is [`leikunx/skills-private`](https://github.com/leikunx
 
 Put a skill here only when its instructions, examples, references, and scripts are safe to share publicly. Put it in the private companion repository when it mentions internal projects, systems, URLs, architecture, tenant behavior, or team-only operating procedures. When uncertain, use `private` first and make a reviewed public extraction later.
 
-## Engineering review and repair
+## Engineering review
 
 - `$skills-shared:architecture-health-review` produces architecture and production-readiness findings backed by executable receipts, counter-searches, and explicit blast-radius gates. It is read-only unless implementation is separately requested.
-- `$skills-shared:flaky-test-repair` distinguishes genuine nondeterminism from deterministic regressions and infrastructure failures, then removes the cause without weakening assertions or hiding it behind retries.
 
 ## Use on a workstation
 
