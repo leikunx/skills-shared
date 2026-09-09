@@ -85,6 +85,14 @@ When an iteration requires browser automation, first check whether Playwright Ex
 
 This preference applies only to browser automation. It does not require browser tooling for non-browser work, bypass user authorization, or replace the task's stated safety boundary.
 
+### Multiple browser profiles and accounts
+
+Treat separate Playwright Extension MCP instances as potentially different authenticated browser profiles. Honor an explicitly requested instance; otherwise select the instance using the task's account or organization context and the user-established mapping in project memory or `AGENTS.md`. Use the project's default when no profile-specific context applies. Do not infer identity from a tool name or assume all instances share a session.
+
+Before an account-sensitive action or external write, verify the live signed-in account and relevant organization or tenant through a read-only check in the selected instance. Record the selected instance, expected identity, and verification evidence in goal state. A remembered mapping is a routing hint, not proof of current authentication. If identity is wrong or uncertain, inspect or recover the intended session; ask only when the target identity cannot be determined from existing context and evidence. A disconnected or signed-out instance does not justify silently substituting another identity, transferring credentials, or changing authorization boundaries. Verify non-browser tool authentication separately when needed; browser sign-in does not establish Git, CLI, or API identity.
+
+Keep exact MCP-instance/profile/account mappings in project memory and task-specific observations in goal state. Shared skill instructions and references must describe this selection policy generally, without embedding local account names, tenant identifiers, or machine-specific mappings. Update project memory when the user establishes a changed mapping.
+
 ## Unattended pursuit windows
 
 When the user invokes this skill while saying they will be away, asleep, or unavailable for a stated period, read and follow [the unattended handoff protocol](references/unattended-handoff.md). Before the window begins, present the goal contract and consolidate every material uncertainty that truly requires the user into one clarification message. Record the confirmed window start/end with timezone, recurrence cadence, job/round limit, per-job timeout, exact scheduler command or definition and identifier, non-overlap lease and stale-claim policy, process/log cleanup owner, verification gate, and the same goal-state path. Once the user confirms the contract or explicitly starts the window, do not send blocking questions during it.

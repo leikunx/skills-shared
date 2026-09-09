@@ -2,6 +2,14 @@
 
 This log records user-directed operating requirements and reusable improvements that have objective evidence or are stable safety/operational invariants. Per-goal hypotheses and one-off workarounds remain in the selected goal state's iteration log.
 
+## 2026-09-09 — Profile-aware browser instance selection
+
+- **Trigger:** The user established that separate Playwright Extension MCP instances normally use different authenticated profiles and requested local account mappings with general shared guidance.
+- **Exact change:** Added instance selection by explicit user choice, task account context, and project mapping; live identity checks for account-sensitive actions; goal-state evidence; separation of browser and non-browser authentication; and local storage of exact mappings. Recovery must preserve the intended identity and authorization boundary.
+- **Evidence:** Two distinct Playwright Extension MCP namespaces were available, and the user explicitly supplied their usual profile roles. The prior browser default covered tool availability but did not explain selection between authenticated instances. This is a user-established operational invariant, not a claim that a remembered mapping proves live authentication.
+- **Scope:** Browser iterations with multiple instances or account-sensitive work. Exact account names and machine-specific mappings remain in project memory; no new external authority or mandatory browser work for non-browser tasks is added.
+- **Rollback condition:** If this guidance causes unnecessary identity prompts for public browsing or conflicts with an explicit instance choice, narrow checks to account-sensitive actions while preserving the requested instance. Correct stale mappings in project memory rather than hard-coding replacements into this shared skill.
+
 ## 2026-09-07 — Verified round packets and unattended handoff
 
 - **Trigger:** The user asked for a deep review of AMAP-ML/LongHorizon-Harness and an English, reusable version of a 12-hour sleep-window instruction.
