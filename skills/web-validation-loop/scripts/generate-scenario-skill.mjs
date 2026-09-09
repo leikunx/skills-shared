@@ -123,9 +123,13 @@ ${adapterInstruction}
 
 Use Playwright Extension MCP for browser work when available and whenever the adapter requires it. Announce the ordered case IDs, execute P0 before lower priorities, and preserve declared order within each priority. Capture semantic evidence before and after meaningful interactions. Never infer readiness from a process alone, local execution from a URL flag alone, or success from agent opinion.
 
+Treat the connected page as an exclusive browser-writer resource. Serialize navigation and interaction; parallelize only work that cannot mutate browser state. Unless a case declares a dependency, start it from the adapter's known route and establish its own preconditions. For reload, restore, or pre-session-input behavior, require stable object identity and an authoritative final-state read rather than relying on visual similarity or browser residue.
+
+Use accessibility observations as the default evidence. Add bounded, redacted console/network metadata, adapter-defined streaming events, screenshots, or persisted-artifact reads only when the scenario requires that surface. Do not inject unreviewed application JavaScript. A denial or cancellation case must assert that the persistent side effect did not occur and never grants mutation permission.
+
 For every selected case return \`PASS\`, \`FAIL\`, \`BLOCKED\`, or \`SKIPPED\`, with assertion-level evidence and artifact paths. Do not run a dependent case after its prerequisite fails or is blocked. For recoverable failures, record the failed hypothesis and evidence, choose a materially different safe action, and rerun the affected gate. Do not bypass authentication, authorization, credentials, payment, destructive-action, or user-decision boundaries.
 
-Report the scenario ID and revision, adapter/browser gates, all case verdicts, totals, recovered attempts, remaining blockers, regression findings, and the smallest evidence-backed next development action. List the case IDs in the conversation so the user can review coverage.
+Report the scenario ID and revision, adapter/environment/browser fingerprint, all case verdicts, totals, recovered attempts, remaining blockers, regression findings, and the smallest evidence-backed next development action. Compare a prior report only when its scenario revision, assertion contract, adapter, and environment match; otherwise label it non-comparable. List the case IDs in the conversation so the user can review coverage.
 
 ## Evolution Contract
 
