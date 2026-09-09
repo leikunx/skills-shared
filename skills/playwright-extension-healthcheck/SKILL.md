@@ -15,7 +15,7 @@ Create only one disposable tab at the lightweight public page `https://example.c
 
 ## Required gate
 
-Start a monotonic timer before confirming tool availability. A successful connected run must finish cleanup and stop the timer in less than 10 seconds. Keep the normal path in one orchestration block when available; do not insert commentary or other work between timed gates.
+Start a wall-clock timer before confirming tool availability. A successful connected run must finish cleanup and stop the timer in less than 10 seconds. Keep the normal path in one orchestration block when available; do not insert commentary or other work between timed gates.
 
 1. Confirm that the `mcp__playwright_extension__browser_tabs` and `browser_snapshot` tools are available. If they are not, report that the MCP server is unavailable to the current Codex session.
 2. Create one new tab with `browser_tabs` / `action: "new"` and `url: "https://example.com"`. The new action makes the disposable tab current; identify it from the returned URL host. Do not list or select it on the normal path.
