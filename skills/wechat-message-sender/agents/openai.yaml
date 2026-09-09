@@ -1,4 +1,0 @@
-interface:
-  display_name: "WeChat Message Sender"
-  short_description: "Send a verified message through macOS WeChat"
-  default_prompt: "Use $wechat-message-sender to send a message to a specified WeChat contact."
