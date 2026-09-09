@@ -12,6 +12,8 @@ Treat the revision as immutable execution provenance. If the stored scenario cha
 
 Cases describe observable behavior, not implementation wishes. Do not invent a successful API, selector, credential, tenant configuration, or role merely to make a case executable. Put external requirements in preconditions and classify unavailable requirements as `BLOCKED`.
 
+Coverage should include only applicable state boundaries, but must not hide them inside one happy-path case. Consider pre-session inputs, reload/navigation persistence, fresh-page restore, streaming/progress completion, denial or cancellation of a proposed write, and cleanup of validation-only state. A denial/cancel case asserts that the persistent side effect did not occur; it never authorizes that effect.
+
 ## Environment adapter
 
 An adapter supplies application-specific rules the scenario must not guess:
@@ -28,6 +30,8 @@ When an adapter conflicts with generic guidance, the adapter wins for its applic
 ## Evidence rules
 
 Evidence must be independent of agent opinion. Useful proof includes an accessibility snapshot, exact route/state assertion, response status, network request, console record, persisted artifact, revision, or service readiness endpoint. A screenshot supplements but does not replace semantic assertions.
+
+The connected page has one browser writer at a time. Cases that navigate or interact with the same page execute serially; only non-browser evidence collection may run in parallel. Application protocol or streaming evidence belongs to a reviewed environment adapter or executor extension, not arbitrary case JavaScript.
 
 Never store credentials, tokens, cookies, tenant-private payloads, or unredacted personal data in reports. Record only the minimum route and request details needed to prove the assertion.
 
@@ -55,3 +59,4 @@ Return:
 
 The report is complete only when every selected case has a terminal verdict and referenced artifacts exist.
 
+When comparing with a previous report, require the same scenario revision, assertion contract, adapter, environment, and material role/flight state. Compare stable case IDs and preserve non-comparable or incomplete baselines as historical context rather than treating them as a clean run.

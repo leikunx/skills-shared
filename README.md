@@ -14,6 +14,10 @@ Put a skill here only when its instructions, examples, references, and scripts a
 
 - `$skills-shared:architecture-health-review` produces architecture and production-readiness findings backed by executable receipts, counter-searches, and explicit blast-radius gates. It is read-only unless implementation is separately requested.
 
+## Browser validation
+
+`$skills-shared:web-validation-loop` authors and executes revision-pinned web scenarios with exclusive browser-session ownership, application-appropriate UI/protocol evidence, persistence and restore coverage, complete partial-failure accounting, and comparable baselines when the same scenario contract is rerun.
+
 ## Use on a workstation
 
 Register both Git marketplaces once:
