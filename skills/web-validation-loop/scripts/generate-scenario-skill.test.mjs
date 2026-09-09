@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process'
 import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 test('generated executor carries browser ownership and evidence boundaries', (t) => {
   const root = mkdtempSync(join(tmpdir(), 'scenario-skill-test-'))
@@ -29,7 +30,8 @@ test('generated executor carries browser ownership and evidence boundaries', (t)
   }
   const scenarioPath = join(root, 'scenario.json')
   writeFileSync(scenarioPath, JSON.stringify(scenario))
-  const stdout = execFileSync(process.execPath, [new URL('./generate-scenario-skill.mjs', import.meta.url), '--scenario', scenarioPath, '--output', output, '--adapter', 'example-adapter'], { encoding: 'utf8' })
+  const generator = fileURLToPath(new URL('./generate-scenario-skill.mjs', import.meta.url))
+  const stdout = execFileSync(process.execPath, [generator, '--scenario', scenarioPath, '--output', output, '--adapter', 'example-adapter'], { encoding: 'utf8' })
   const generated = JSON.parse(stdout)
   const skill = readFileSync(join(generated.skillDir, 'SKILL.md'), 'utf8')
   const accepted = JSON.parse(readFileSync(join(generated.skillDir, 'references', 'scenario.json')))
