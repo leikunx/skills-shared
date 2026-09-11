@@ -1,5 +1,5 @@
 ---
-name: web-validation-loop
+name: validation-web-loop
 description: Turn stored web-validation scenarios into scenario-specific skills and run evidence-gated browser feedback loops. Use when authoring a scenario, materializing its executor, or validating a web application from scenario configuration; do not use for unit-only testing.
 ---
 
@@ -27,7 +27,7 @@ Run the deterministic generator with the accepted scenario file and a destinatio
 node <this-skill-directory>/scripts/generate-scenario-skill.mjs --scenario <scenario.json> --output <skills-directory> [--adapter <environment-adapter-skill>]
 ```
 
-The generator validates required fields and unique case IDs, copies the accepted scenario into the generated skill, and refuses to overwrite an existing directory unless `--force` is supplied. Use `--force` only when the existing directory carries this generator's marker and the user requested regeneration. Review scenario contents before distributing a generated skill because task-local URLs or test data may be private.
+The generator names executors `validation-<scenario-id>`, validates required fields and unique case IDs, copies the accepted scenario into the generated skill, and refuses to overwrite an existing directory unless `--force` is supplied. Use `--force` only when the existing directory carries this generator's current or legacy marker and the user requested regeneration. Review scenario contents before distributing a generated skill because task-local URLs or test data may be private.
 
 Validate the generated skill structurally before using it. A generated skill is a scenario executor, not new authority: it inherits the scenario's and adapter's boundaries.
 

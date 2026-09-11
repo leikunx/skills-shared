@@ -1,0 +1,4 @@
+interface:
+  display_name: "Web Validation Loop"
+  short_description: "Generate and run scenario-driven web validation loops"
+  default_prompt: "Use $validation-web-loop to turn my stored validation scenario into an executable skill and run its browser checks."

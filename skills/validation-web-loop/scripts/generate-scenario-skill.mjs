@@ -53,7 +53,7 @@ function validateScenario(scenario) {
 }
 
 function skillNameFor(id) {
-  const raw = `${id}-validation`
+  const raw = `validation-${id}`
   if (raw.length <= 64) return raw
   const suffix = createHash('sha256').update(raw).digest('hex').slice(0, 8)
   return `${raw.slice(0, 55).replace(/-+$/, '')}-${suffix}`
@@ -87,11 +87,13 @@ validateScenario(scenario)
 const skillName = skillNameFor(scenario.id)
 const skillDir = join(resolve(outputArg), skillName)
 const skillPath = join(skillDir, 'SKILL.md')
-const marker = '<!-- generated-by: web-validation-loop -->'
+const marker = '<!-- generated-by: validation-web-loop -->'
+// Recognize the original marker when regenerating a skill moved to its new name.
+const legacyMarker = '<!-- generated-by: web-validation-loop -->'
 
 if (existsSync(skillDir) && !force) fail(`target exists; pass --force to regenerate: ${skillDir}`)
 if (existsSync(skillDir) && force) {
-  if (!existsSync(skillPath) || !readFileSync(skillPath, 'utf8').includes(marker)) {
+  if (!existsSync(skillPath) || ![marker, legacyMarker].some((value) => readFileSync(skillPath, 'utf8').includes(value))) {
     fail(`refusing to overwrite an unrecognized skill directory: ${skillDir}`)
   }
 }
