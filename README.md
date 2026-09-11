@@ -10,6 +10,8 @@ The team-only companion is [`leikunx/skills-private`](https://github.com/leikunx
 
 Put a skill here only when its instructions, examples, references, and scripts are safe to share publicly. Put it in the private companion repository when it mentions internal projects, systems, URLs, architecture, tenant behavior, or team-only operating procedures. When uncertain, use `private` first and make a reviewed public extraction later.
 
+Create and update skills through `$skills-private:skill-creator`. New sources belong only in the two repositories' `skills/` directories, not standalone user/project locations or plugin caches. Knowledge/reference skills must be named `knowledge-<topic>`; the creator's `--kind knowledge` option supplies that prefix. Workstation activation and the portable creator tooling are maintained in the private companion.
+
 ## Engineering review
 
 - `$skills-shared:architecture-health-review` produces architecture and production-readiness findings backed by executable receipts, counter-searches, and explicit blast-radius gates. It is read-only unless implementation is separately requested.
