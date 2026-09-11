@@ -32,3 +32,5 @@ codex plugin add skills-private@skills-private
 ```
 
 For later updates, run `codex-m365`. Before it refreshes and reinstalls the plugins, it safely commits and pushes non-ignored changes in this repository and its private companion. It blocks likely secret files, merge divergence, missing upstream branches, or failed Git operations rather than overwriting or force-pushing.
+
+New-machine installation and migration are owned by `$skills-private:knowledge-codex-m365-setup`; its [guide and scripts](https://github.com/leikunx/skills-private/tree/main/skills/knowledge-codex-m365-setup) live together in the private repository.
