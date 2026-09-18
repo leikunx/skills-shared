@@ -20,17 +20,24 @@
 - Authoritative user amendments:
 - Next bounded action:
 
-## Unattended window (when applicable)
+## Scheduled follow-ups / unattended window (when applicable)
 
-- Window start/end/timezone:
+- Window start/end/timezone or stop condition:
+- Scheduling mechanism / execution environment:
 - Scheduler command or definition:
 - Scheduler id / current job id:
+- Scheduler enabled state / next run:
+- Last actual scheduled run / verification evidence:
+- Current job outcome (progress, waiting, failed, complete):
 - Cadence / maximum jobs:
 - Per-job timeout:
 - Active round lease / expiry:
 - Stale-claim recovery evidence:
 - Owned processes / readiness / log paths:
 - Cleanup or handoff owner:
+- Last inspected target revision / message:
+- Sent notification identifiers / completion notification evidence:
+- Schedule shutdown condition / verified shutdown:
 
 ## Iteration log
 

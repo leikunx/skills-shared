@@ -2,6 +2,14 @@
 
 This log records user-directed operating requirements and reusable improvements that have objective evidence or are stable safety/operational invariants. Per-goal hypotheses and one-off workarounds remain in the selected goal state's iteration log.
 
+## 2026-09-18 — Scheduled follow-ups and optional knowledge routing
+
+- **Trigger:** The user requested that goal-loop-runner consult the scheduling knowledge skill for goals whose completion depends on future checks.
+- **Exact change:** Added a Scheduled follow-ups route with an optional `$skills-private:knowledge-codex-scheduled-followups` reference and public documentation fallback; supported native existing-chat and standalone schedules alongside external CLI schedulers; required actual scheduler-run evidence, shared state, non-overlap, deduplication and shutdown. Updated unattended handoff and state fields consistently. Distinguished waiting jobs, goal status and scheduler status, preserving the host's blocked-goal threshold across goal turns.
+- **Evidence:** The current [official scheduled tasks page](https://learn.chatgpt.com/docs/automations?surface=app), fetched on 2026-09-18, explicitly describes minute-based existing-chat follow-ups and scheduled PR review loops. [Non-interactive mode](https://learn.chatgpt.com/docs/non-interactive-mode) documents `codex exec` for scheduled jobs and explicit session resume. Earlier skill text required an external scheduler only. This is a user-directed operating requirement supported by documentation, not a claim that an unattended integration has been runtime-tested.
+- **Scope:** Goals needing future checks, including review/build/reply waits and stated away windows. No private project data or hard private-plugin dependency is added; this change does not create a schedule or expand external-action authority.
+- **Rollback condition:** If optional lookup blocks users without the private plugin, restore the public fallback. If tool/schema availability or official behavior changes, revise the mechanism-specific wording while preserving actual-run verification, authorization, deduplication and host goal-status rules.
+
 ## 2026-09-09 — Profile-aware browser instance selection
 
 - **Trigger:** The user established that separate Playwright Extension MCP instances normally use different authenticated profiles and requested local account mappings with general shared guidance.

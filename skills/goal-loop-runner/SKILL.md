@@ -1,6 +1,6 @@
 ---
 name: goal-loop-runner
-description: "Run a long-horizon task as a goal-driven, stateful, evidence-gated iteration loop. Use for Goal mode, 'continue until done', recurring or unattended pursuit windows, or fuzzy voice-transcribed requests that need a reviewable goal contract."
+description: "Run a long-horizon task as a goal-driven, stateful, evidence-gated iteration loop. Use for Goal mode, 'continue until done', scheduled follow-ups, recurring or unattended pursuit windows, or fuzzy voice-transcribed requests that need a reviewable goal contract."
 ---
 
 # Goal Loop Runner
@@ -93,11 +93,25 @@ Before an account-sensitive action or external write, verify the live signed-in 
 
 Keep exact MCP-instance/profile/account mappings in project memory and task-specific observations in goal state. Shared skill instructions and references must describe this selection policy generally, without embedding local account names, tenant identifiers, or machine-specific mappings. Update project memory when the user establishes a changed mapping.
 
+## Scheduled follow-ups
+
+When the goal needs checks after the current turn ends—such as waiting for reviews, builds, replies, or deployment results—consider scheduling during the contract and handoff. Distinguish the goal's desired outcome from the mechanism that will trigger later work. A goal, skill, state file, or service-side auto-complete setting does not establish a Codex schedule.
+
+If available, read `$skills-private:knowledge-codex-scheduled-followups` for native scheduling, CLI alternatives, and verification guidance. This is an optional knowledge reference, not a required private dependency: when absent, use the current [official scheduled tasks documentation](https://learn.chatgpt.com/docs/automations?surface=app) and the guidance below. Discover actual tool schemas or supported app controls before creating a schedule; do not invent tool names, copy unverified parameters, or equate missing session tools with missing product capability.
+
+- Prefer a supported schedule in the existing chat for context-dependent follow-ups; official documentation describes minute-based intervals. Use a standalone schedule for independent runs. An external scheduler invoking `codex exec` is an alternative when native scheduling is unavailable or the execution environment calls for it; see [non-interactive mode](https://learn.chatgpt.com/docs/non-interactive-mode).
+- Reuse the user's established execution scope and scheduling authorization. Make cadence, timezone, stop condition or pursuit window, permitted actions, and notification destination concrete. Ask only for a material missing choice. A request to explain or edit scheduling guidance does not create a monitor, and an ordinary goal does not silently authorize indefinite recurrence.
+- Inspect for an existing matching schedule before creating one. Record its identifier, enabled state, next run, exact definition, execution environment, shared state path, bounded runtime, and non-overlap lease. Verify an actual scheduler-launched run, including required tools, browser profile, authentication, and resulting evidence, before claiming unattended monitoring works. A saved definition or a successful manual chat check alone is insufficient.
+- If only external review or a confirmed running job remains, record the current job as waiting and preserve a separately authorized schedule until its stop condition. Keep goal status, job outcome, and scheduler status distinct. Follow the host's repeated-blocker policy for the goal; do not keep it active by fabricating progress, resetting the blocker audit, or implying that marking it blocked creates or cancels a schedule.
+- On verified completion, send any already-authorized completion notification once and disable the schedule. At the configured end or user stop, stop launching jobs and report the accepted checkpoint and remaining gates. If no verified scheduler exists, state that future checks are not configured instead of promising unattended monitoring.
+
+Use the state template's scheduling fields only when applicable. For a stated away/asleep window, also follow the handoff protocol below; it adds window-specific preparation without requiring the private plugin.
+
 ## Unattended pursuit windows
 
 When the user invokes this skill while saying they will be away, asleep, or unavailable for a stated period, read and follow [the unattended handoff protocol](references/unattended-handoff.md). Before the window begins, present the goal contract and consolidate every material uncertainty that truly requires the user into one clarification message. Record the confirmed window start/end with timezone, recurrence cadence, job/round limit, per-job timeout, exact scheduler command or definition and identifier, non-overlap lease and stale-claim policy, process/log cleanup owner, verification gate, and the same goal-state path. Once the user confirms the contract or explicitly starts the window, do not send blocking questions during it.
 
-Treat the stated period as an instruction to keep pursuing the active goal rather than to end at the first recoverable failure. Use an external scheduler to launch bounded, stateful jobs during that window; the skill itself does not create a daemon or keep an inactive chat turn alive. Prevent overlapping jobs from acting on the same mutable target unless concurrency is explicitly safe. Each job records its scheduler/job id, claims one round with a time-bounded lease, rebuilds the compact round packet, and starts from the last accepted checkpoint rather than from an earlier executor claim. A later job may reclaim a stale lease only after checking that its process or external action is no longer active.
+Treat the stated period as an instruction to keep pursuing the active goal rather than to end at the first recoverable failure. Use a supported native Codex schedule or an external scheduler to launch bounded, stateful jobs during that window, following Scheduled follow-ups above. The skill itself does not create a daemon or timer. Prevent overlapping jobs from acting on the same mutable target unless concurrency is explicitly safe. Each job records its scheduler/job id, claims one round with a time-bounded lease, rebuilds the compact round packet, and starts from the last accepted checkpoint rather than from an earlier executor claim. A later job may reclaim a stale lease only after checking that its process or external action is no longer active.
 
 Each unattended job must read the state and first inspect the current browser, process, service, or remote state. After a failure, record the failed hypothesis and try the next materially different safe diagnostic or recovery action in that job. For browser work, examples include rechecking extension connectivity, listing/selecting available tabs, opening a fresh tab, waiting for page readiness, inspecting console/network evidence, and revisiting the relevant authenticated route. Do not repeat an unchanged failed action or stop solely because one page navigation, selector, or process start failed.
 
@@ -154,7 +168,7 @@ An unsuccessful action is an **iteration result**, not a terminal response, when
 Before reporting final status, check the goal state for an untried, safe, authorized action with a credible path to the done condition. If one exists, take it instead of ending on the failure. Conclude only when one of these conditions holds:
 
 - **Complete:** the final deliverable exists and fresh objective-gate evidence proves its done condition.
-- **Blocked:** the same external prerequisite has persisted for three consecutive cycles, or progress requires credentials, external approval, destructive action, or a material product decision. Report the exact evidence, attempts, and minimum unblocking action.
+- **Blocked:** progress requires a genuine external prerequisite and the host's repeated-blocker threshold across goal turns is satisfied. Report the exact evidence, attempts, minimum unblocking action, and any independently configured schedule. A bounded scheduled job may end as waiting without claiming the goal is achieved; subsequent goal-status updates still follow the host policy.
 - **User-directed stop:** the user explicitly ends or changes the objective.
 
 ### Validated skill evolution during pursuit
@@ -177,7 +191,7 @@ When a changed recovery action improves a managed-process gate, add a **provisio
 
 Promote that record to a validated lesson only after a later cycle or independent run applies the changed method and passes the same objective gate. If the method is a stable operational invariant needed by later users, then update the relevant skill or reference with the trigger, exact change, evidence, and rollback condition. Keep one-off tool quirks task-local; do not update a reusable skill merely because a recovery happened once.
 
-Finish only when the done condition and fresh gate evidence both hold. If the same external blocker persists for three consecutive cycles, follow Codex’s blocked-goal policy. Escalate immediately for missing authority, credentials, risky external actions, or a decision that requires human judgment.
+Finish only when the done condition and fresh gate evidence both hold. If the same external blocker persists across the required consecutive goal turns, follow Codex's blocked-goal policy. Escalate immediately for missing authority, credentials, risky external actions, or a decision that requires human judgment; escalation does not waive the host's blocked-status threshold.
 
 ## Candidate improvement and selection
 
@@ -187,4 +201,4 @@ For code, prefer one implementation plus an independent reviewer or verifier whe
 
 ## Boundaries
 
-This skill is invoked as `$goal-loop-runner`. It does not add a native `/loop` command, a background daemon, or a timer. Recurring unattended execution must be run by an external scheduler that starts bounded Codex jobs and gives each job the same goal and state-file path.
+This skill is invoked as `$goal-loop-runner`. It does not add a native `/loop` command, a background daemon, or a timer. Recurring unattended execution needs a verified native Codex schedule or external scheduler that starts bounded jobs with the same goal contract and accessible state path. Loading this skill or its scheduling reference does not itself enable recurrence.
