@@ -95,6 +95,17 @@ Before an account-sensitive action or external write, verify the live signed-in 
 
 Keep exact instance/profile/account mappings in project memory, updating them when the user changes them; keep task observations in goal state. Shared guidance must remain general, without local account names, tenant identifiers, or machine-specific mappings.
 
+## Project delivery workflow
+
+For ClawNet change-delivery goals, prefer the available
+`$skills-private:clawnet-deploy-e2e-verifiy` skill as the default completion
+workflow: scoped validation, main publication, matching deployment, and production
+E2E evidence. Read the project's current title rules and resolve the originating
+client identity locally. This optional project route does not apply to unrelated
+projects, require installing a private plugin, or authorize publication for an
+inspection-only request. Reuse existing task authorization and honor narrower
+instructions; if the skill is absent, follow the repository's delivery guidance.
+
 ## Scheduled follow-ups
 
 Consider scheduling during contract and handoff when checks must continue after the turn, such as review, build, reply, or deployment waits. Distinguish the outcome from its later-work trigger: a goal, skill, state file, or service-side auto-complete setting does not establish a Codex schedule.

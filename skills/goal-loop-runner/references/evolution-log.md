@@ -2,6 +2,14 @@
 
 This log records user-directed operating requirements and reusable improvements that have objective evidence or are stable safety/operational invariants. Per-goal hypotheses and one-off workarounds remain in the selected goal state's iteration log.
 
+## 2026-09-20 — Contextual ClawNet delivery default
+
+- **Trigger:** The user asked goal-loop-runner to use the available ClawNet deployment/E2E skill by default for that project's delivery work.
+- **Exact change:** Added an optional project-specific route to `skills-private:clawnet-deploy-e2e-verifiy`, retaining existing authorization, inspection-only behavior, repository instructions and fallback when the private skill is unavailable.
+- **Evidence:** The named skill is installed and defines validation, main publication, matching deployment and live E2E gates. This is a user-established workflow preference; no claim of universal cross-project benefit is made.
+- **Scope:** ClawNet change-delivery goals only. No local machine name, credentials or private endpoints are stored in shared guidance.
+- **Rollback condition:** Narrow or remove the route if it triggers unrelated delivery, blocks environments without the private skill, or conflicts with a later user scope.
+
 ## 2026-09-20 — Cross-project lesson retrieval and portable startup
 
 - **Trigger:** The user requested a local MCP index of prior goals, review of 3–5 nearest goals before new work, and automatic local setup when the skill is used on another machine.
