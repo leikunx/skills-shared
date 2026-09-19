@@ -8,6 +8,17 @@
 - State path:
 - Limits and approval boundaries:
 
+## Prior-goal learning
+
+- Memory service readiness / MCP or bundled-client evidence:
+- Registered project ID / this goal ID / evolution.json revision:
+- Retrieval query / excluded current goal:
+- Selected 3–5 distinct prior goal IDs and source revisions:
+- Per-lesson applicability and decision (apply / reject / test-next):
+- Evidence freshness and current verification gate:
+- Shortfall or unavailable prerequisite, when fewer than three are relevant:
+- Reuse outcomes and next validation / promotion decision:
+
 ## Current round packet
 
 - Contract version:

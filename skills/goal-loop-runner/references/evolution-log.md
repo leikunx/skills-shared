@@ -2,6 +2,14 @@
 
 This log records user-directed operating requirements and reusable improvements that have objective evidence or are stable safety/operational invariants. Per-goal hypotheses and one-off workarounds remain in the selected goal state's iteration log.
 
+## 2026-09-20 — Cross-project lesson retrieval and portable startup
+
+- **Trigger:** The user requested a local MCP index of prior goals, review of 3–5 nearest goals before new work, and automatic local setup when the skill is used on another machine.
+- **Exact change:** Added a bundled Python MCP service, private per-user bootstrap, registered-project SQLite search, source-backed `evolution.json` lessons, revision-checked writes, evidence hashes, portable cross-project scope, and measured reuse records. Startup now reviews distinct relevant goals and reports real shortfalls. Existing Markdown imports stay provisional and project-local; empty lesson placeholders do not fill the quota. The same-service command-line client supports a current session before newly registered MCP tools appear.
+- **Evidence:** Nineteen storage, bootstrap and live-MCP transport tests pass. Independent synthetic-project forward testing passed 40 checks and exposed three repaired defects: SDK client compatibility, service restart socket reuse, and stale application evidence. A final portability review also corrected Windows setup-owner liveness checks to use query-only process handles. A fresh Codex discovery returned all seven authenticated tools. Actual startup and fresh-home bootstrap were verified on macOS ARM64; Windows/Linux paths are implemented but not runtime-verified.
+- **Scope:** Goal learning across explicitly registered local projects. No whole-home scan, cloud database, automatic lesson promotion, machine-to-machine synchronization, or authority transfer. Runtime data and credentials remain outside the shared repository.
+- **Rollback condition:** If retrieval violates project scope, misrepresents evidence, or setup changes unrelated configuration, stop the owned service and restore its scoped configuration backup after reviewing concurrent edits; retain goal source records. Revert the affected instruction or service change before re-enabling it.
+
 ## 2026-09-20 — User-requested wording reduction
 
 - **Trigger:** The user requested an approximately 15% smaller skill and publication to `main`.
