@@ -1,5 +1,5 @@
 ---
-name: computer-use
+name: knowledge-computer-use
 description: Observe and operate macOS desktop applications through screenshots, Accessibility controls, and verified mouse or keyboard actions. Use for native app tasks, desktop UI validation, or setting up Mac computer-use tooling; prefer connected browser automation for ordinary web pages.
 ---
 

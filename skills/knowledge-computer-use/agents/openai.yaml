@@ -1,4 +1,4 @@
 interface:
   display_name: "Computer Use on macOS"
   short_description: "Observe and operate macOS apps with verified targets"
-  default_prompt: "Use $computer-use to inspect my Mac automation tools and complete the requested desktop task."
+  default_prompt: "Use $knowledge-computer-use to inspect my Mac automation tools and complete the requested desktop task."
