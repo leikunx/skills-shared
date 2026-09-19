@@ -2,6 +2,14 @@
 
 This log records user-directed operating requirements and reusable improvements that have objective evidence or are stable safety/operational invariants. Per-goal hypotheses and one-off workarounds remain in the selected goal state's iteration log.
 
+## 2026-09-20 — User-requested wording reduction
+
+- **Trigger:** The user requested an approximately 15% smaller skill and publication to `main`.
+- **Exact change:** Shortened repetitive prose in `SKILL.md`, preserving its sections, contract, verification, authorization, scheduling, recovery, and evolution requirements without moving content into references.
+- **Evidence:** UTF-8 size fell from 25,950 to 22,031 bytes (15.10%); whitespace-delimited words fell from 3,724 to 3,036 (18.47%). Diff review retained the requirements and reference targets. These measurements establish a smaller entrypoint, not improved execution outcomes.
+- **Scope:** Editorial changes to this entrypoint only; existing supporting procedures are unchanged.
+- **Rollback condition:** Restore any wording shown by a later run to have lost a decision-relevant distinction or weakened an operating requirement.
+
 ## 2026-09-18 — Scheduled follow-ups and optional knowledge routing
 
 - **Trigger:** The user requested that goal-loop-runner consult the scheduling knowledge skill for goals whose completion depends on future checks.

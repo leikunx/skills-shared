@@ -5,11 +5,11 @@ description: "Run a long-horizon task as a goal-driven, stateful, evidence-gated
 
 # Goal Loop Runner
 
-Combine Codex goal tracking with a disciplined execution loop. The goal preserves the user’s objective across turns; the loop makes every iteration produce fresh evidence and a useful next decision.
+Combine Codex goal tracking with an execution loop: preserve the user’s objective across turns and produce fresh evidence and a useful next decision each iteration.
 
 ## Turn a natural-language request into a strong Goal
 
-Treat the user's request as natural language, not as a pre-filled Goal contract. Before creating a Goal or taking substantive action, translate it into this six-part draft:
+Before creating a Goal or taking substantive action, translate the user's natural-language request into this six-part draft:
 
 1. **Outcome:** what must be true at completion.
 2. **Verification surface:** the concrete evidence that will prove it.
@@ -20,17 +20,11 @@ Treat the user's request as natural language, not as a pre-filled Goal contract.
 
 ### Fuzzy or voice-transcribed input preflight
 
-Unless the user explicitly says otherwise, presume their messages are speech-to-text transcriptions. Before acting,
-silently infer the most coherent intended meaning by resolving obvious homophones, repeated syllables, punctuation
-loss, and contextually implausible words against the active goal and available evidence. Treat that inference as an
-assumption, not as a license to change the user's authority, desired outcome, verification method, or risk boundary.
-When a materially different interpretation would change one of those things, surface the alternatives and ask one
-narrow clarifying question. Retain confirmed transcription corrections as task facts in the goal state; promote only
-stable, user-established conventions to reusable guidance.
+Unless the user says otherwise, presume speech-to-text input. Silently resolve obvious homophones, repetitions, missing punctuation, and implausible words against the active goal and evidence. Treat inferred meaning as an assumption; never change authority, outcome, verification, or risk boundaries. If interpretations differ materially on those points, surface the alternatives and ask one narrow question. Keep confirmed corrections in goal state; promote only stable, user-established conventions to reusable guidance.
 
-Treat an input as **fuzzy** when speech disfluencies, repetitions, fragments, vague references (such as “that thing” or “the previous goal”), missing success criteria, or conflicting directions leave any of the six parts materially uncertain. Do not mistake informal wording alone for uncertainty; infer ordinary implementation details when that does not change authority, risk, the verification method, or the intended outcome.
+Input is **fuzzy** when disfluencies, fragments, vague references, missing success criteria, or conflicting directions leave any contract element materially uncertain. Informal wording alone is not uncertainty; infer ordinary implementation details without changing authority, risk, verification, or outcome.
 
-For fuzzy input, before creating a Goal or taking substantive action, show the user the six-part draft in the first progress update. Mark every material inference as `Assumption:`. Then perform and show a concise **Contract review** with one finding for each element:
+For fuzzy input, show the draft in the first progress update before creating a Goal or taking substantive action. Mark material inferences `Assumption:` and show a **Contract review** with one finding per element:
 
 1. Does the Outcome describe an observable end state rather than an activity?
 2. Can the Verification surface produce evidence independent of the agent's opinion?
@@ -39,11 +33,11 @@ For fuzzy input, before creating a Goal or taking substantive action, show the u
 5. Does the Iteration policy choose a smallest evidence-producing next action and avoid unchanged retries?
 6. Does the Blocked stop condition name the evidence, missing input, or authority needed to proceed?
 
-End the review with `Decision: proceed`, `Decision: proceed with stated assumptions`, or `Decision: clarification required`. A self-review checks the contract's usefulness; it is never proof that the eventual outcome is correct.
+End with `Decision: proceed`, `Decision: proceed with stated assumptions`, or `Decision: clarification required`. This review checks contract usefulness, not eventual outcome correctness.
 
-If a review finding is weak but can be safely repaired, revise the draft once using explicit assumptions and review the revision. Ask one narrow clarifying question only if a remaining weakness would materially change the objective, proof method, authority, safety risk, or external impact. Until then, do not create a Goal or take substantive action. For a sufficiently concrete request, display the same compact contract but keep the review proportional: an itemized review is needed only when an assumption or material tradeoff needs the user's confirmation.
+Safely repair weak findings once with explicit assumptions and review the revision. Ask one narrow question only if a remaining weakness materially affects objective, proof, authority, safety, or external impact; defer Goal creation and substantive action until resolved. For concrete requests, show the compact contract; itemize the review only when an assumption or material tradeoff needs confirmation.
 
-State the proposed contract concisely in the first progress update. Do not ask about details that can be safely discovered or reasonably assumed; ask only when a missing choice would materially alter the outcome, verification method, authority, or risk. Once the contract is sufficiently concrete, create the Goal and copy the six parts and the Contract review decision into its state file.
+Present the contract in the first progress update. Discover or reasonably assume routine details. Once the contract is concrete, create the Goal and copy its six parts and review decision into the state file.
 
 Use this compact form when presenting a draft:
 
@@ -69,7 +63,7 @@ Create the state file from [the state template](references/state-template.md) wh
 
 ## Round packet and checkpoint trust
 
-Start every iteration by reconstructing a compact round packet from the original objective and active contract, the latest accepted checkpoint and its evidence, remaining work, relevant failure or rejection evidence, and authoritative user amendments. Do not use a growing raw transcript as task state. Raw trajectories, tool logs, executor claims, partial output, and timed-out work may help diagnosis, but they are not accepted progress by themselves.
+Start each iteration with a compact round packet: original objective, active contract, latest accepted checkpoint and evidence, remaining work, relevant failures or rejections, and authoritative user amendments. Raw transcripts, tool logs, executor claims, partial output, and timed-out work support diagnosis, not accepted progress.
 
 Keep attempt, verification, and checkpoint decisions distinct:
 
@@ -77,47 +71,47 @@ Keep attempt, verification, and checkpoint decisions distinct:
 2. **Verification:** inspect the real file, application, browser, service, or other final-state carrier against the original contract and the action's gate. Treat the action report only as a claim.
 3. **Checkpoint:** promote only independently supported facts and artifacts into accepted state. Put failed, ambiguous, contaminated, or not-yet-verified output under `Untrusted/rejected` with the evidence needed for recovery; never overwrite the last accepted checkpoint with it.
 
-For complex or consequential work, prefer a separate reviewer or verifier when available. Otherwise perform a dedicated verification pass that makes no task-state mutations. Reconstruct the important acceptance constraints from the original request during that pass so contract drift, an incomplete last subtask, or an easier proxy cannot become the completion standard. Goal state and run logs are execution records, not substitutes for the user's requested deliverable.
+For complex or consequential work, prefer a separate reviewer or verifier when available; otherwise use a dedicated pass without task-state mutations. Reconstruct the original acceptance constraints to prevent contract drift, incomplete subtasks, or easier proxies from redefining completion. Goal state and logs never substitute for the deliverable.
 
 ## Browser automation default
 
-When an iteration requires browser automation, first check whether Playwright Extension MCP tools are available in the current session. When they are available, use Playwright Extension MCP for the initial browser action and collect its result as evidence. Use another browser mechanism only when the user explicitly requests it, the extension is unavailable or disconnected, or the task requires a capability it cannot provide; record that reason in the goal state before continuing.
+For browser automation, first check Playwright Extension MCP availability. When available, use it for the initial browser action and collect evidence. Use another mechanism only at the user's explicit request, when the extension is unavailable or disconnected, or for an unsupported capability; first record the reason in goal state.
 
-This preference applies only to browser automation. It does not require browser tooling for non-browser work, bypass user authorization, or replace the task's stated safety boundary.
+This browser-only preference does not require browser tools for other work or override authorization or safety boundaries.
 
 ### Multiple browser profiles and accounts
 
-Treat separate Playwright Extension MCP instances as potentially different authenticated browser profiles. Honor an explicitly requested instance; otherwise select the instance using the task's account or organization context and the user-established mapping in project memory or `AGENTS.md`. Use the project's default when no profile-specific context applies. Do not infer identity from a tool name or assume all instances share a session.
+Separate Playwright Extension MCP instances may use different authenticated profiles. Honor an explicit instance choice; otherwise use task account/organization context and user-established mappings in project memory or `AGENTS.md`. Use the project default only without profile-specific context. Tool names do not prove identity; instances need not share sessions.
 
 Before an account-sensitive action or external write, verify the live signed-in account and relevant organization or tenant through a read-only check in the selected instance. Record the selected instance, expected identity, and verification evidence in goal state. A remembered mapping is a routing hint, not proof of current authentication. If identity is wrong or uncertain, inspect or recover the intended session; ask only when the target identity cannot be determined from existing context and evidence. A disconnected or signed-out instance does not justify silently substituting another identity, transferring credentials, or changing authorization boundaries. Verify non-browser tool authentication separately when needed; browser sign-in does not establish Git, CLI, or API identity.
 
-Keep exact MCP-instance/profile/account mappings in project memory and task-specific observations in goal state. Shared skill instructions and references must describe this selection policy generally, without embedding local account names, tenant identifiers, or machine-specific mappings. Update project memory when the user establishes a changed mapping.
+Keep exact instance/profile/account mappings in project memory, updating them when the user changes them; keep task observations in goal state. Shared guidance must remain general, without local account names, tenant identifiers, or machine-specific mappings.
 
 ## Scheduled follow-ups
 
-When the goal needs checks after the current turn ends—such as waiting for reviews, builds, replies, or deployment results—consider scheduling during the contract and handoff. Distinguish the goal's desired outcome from the mechanism that will trigger later work. A goal, skill, state file, or service-side auto-complete setting does not establish a Codex schedule.
+Consider scheduling during contract and handoff when checks must continue after the turn, such as review, build, reply, or deployment waits. Distinguish the outcome from its later-work trigger: a goal, skill, state file, or service-side auto-complete setting does not establish a Codex schedule.
 
-If available, read `$skills-private:knowledge-codex-scheduled-followups` for native scheduling, CLI alternatives, and verification guidance. This is an optional knowledge reference, not a required private dependency: when absent, use the current [official scheduled tasks documentation](https://learn.chatgpt.com/docs/automations?surface=app) and the guidance below. Discover actual tool schemas or supported app controls before creating a schedule; do not invent tool names, copy unverified parameters, or equate missing session tools with missing product capability.
+If available, read `$skills-private:knowledge-codex-scheduled-followups` for scheduling, CLI alternatives, and verification. This private reference is optional; otherwise use the current [official scheduled tasks documentation](https://learn.chatgpt.com/docs/automations?surface=app) and guidance below. Discover actual schemas or supported app controls before scheduling; never invent tools, copy unverified parameters, or equate missing session tools with missing product capability.
 
-- Prefer a supported schedule in the existing chat for context-dependent follow-ups; official documentation describes minute-based intervals. Use a standalone schedule for independent runs. An external scheduler invoking `codex exec` is an alternative when native scheduling is unavailable or the execution environment calls for it; see [non-interactive mode](https://learn.chatgpt.com/docs/non-interactive-mode).
-- Reuse the user's established execution scope and scheduling authorization. Make cadence, timezone, stop condition or pursuit window, permitted actions, and notification destination concrete. Ask only for a material missing choice. A request to explain or edit scheduling guidance does not create a monitor, and an ordinary goal does not silently authorize indefinite recurrence.
-- Inspect for an existing matching schedule before creating one. Record its identifier, enabled state, next run, exact definition, execution environment, shared state path, bounded runtime, and non-overlap lease. Verify an actual scheduler-launched run, including required tools, browser profile, authentication, and resulting evidence, before claiming unattended monitoring works. A saved definition or a successful manual chat check alone is insufficient.
-- If only external review or a confirmed running job remains, record the current job as waiting and preserve a separately authorized schedule until its stop condition. Keep goal status, job outcome, and scheduler status distinct. Follow the host's repeated-blocker policy for the goal; do not keep it active by fabricating progress, resetting the blocker audit, or implying that marking it blocked creates or cancels a schedule.
-- On verified completion, send any already-authorized completion notification once and disable the schedule. At the configured end or user stop, stop launching jobs and report the accepted checkpoint and remaining gates. If no verified scheduler exists, state that future checks are not configured instead of promising unattended monitoring.
+- Prefer supported existing-chat schedules for context-dependent follow-ups; official documentation describes minute-based intervals. Use standalone schedules for independent runs. When native scheduling is unavailable or the environment requires it, an external scheduler can invoke `codex exec`; see [non-interactive mode](https://learn.chatgpt.com/docs/non-interactive-mode).
+- Reuse established execution scope and scheduling authorization. Specify cadence, timezone, stop condition or pursuit window, permitted actions, and notification destination; ask only for material missing choices. Editing or explaining guidance does not create a monitor; ordinary goals do not authorize indefinite recurrence.
+- Check for a matching schedule before creating one. Record its identifier, enabled state, next run, exact definition, environment, shared state path, bounded runtime, and non-overlap lease. Verify an actual scheduler-launched run with required tools, browser profile, authentication, and resulting evidence before claiming monitoring works; a saved definition or manual check is insufficient.
+- If only external review or a confirmed running job remains, mark the current job waiting and preserve a separately authorized schedule until its stop condition. Keep goal, job, and scheduler status distinct. Follow the host's repeated-blocker policy; never fabricate progress, reset its audit, or imply that blocking a goal creates or cancels a schedule.
+- On verified completion, send any already-authorized notification once and disable the schedule. At its configured end or user stop, stop launching jobs and report the accepted checkpoint and remaining gates. Without a verified scheduler, state that future checks are not configured.
 
-Use the state template's scheduling fields only when applicable. For a stated away/asleep window, also follow the handoff protocol below; it adds window-specific preparation without requiring the private plugin.
+Use scheduling state fields only when applicable. For away/asleep windows, also follow the handoff protocol below; it needs no private plugin.
 
 ## Unattended pursuit windows
 
-When the user invokes this skill while saying they will be away, asleep, or unavailable for a stated period, read and follow [the unattended handoff protocol](references/unattended-handoff.md). Before the window begins, present the goal contract and consolidate every material uncertainty that truly requires the user into one clarification message. Record the confirmed window start/end with timezone, recurrence cadence, job/round limit, per-job timeout, exact scheduler command or definition and identifier, non-overlap lease and stale-claim policy, process/log cleanup owner, verification gate, and the same goal-state path. Once the user confirms the contract or explicitly starts the window, do not send blocking questions during it.
+For a stated away/asleep period, follow [the unattended handoff protocol](references/unattended-handoff.md). Before it begins, present the contract and consolidate material uncertainties requiring user input into one clarification. Record confirmed start/end and timezone, cadence, job/round limit, per-job timeout, exact scheduler command or definition and identifier, non-overlap lease and stale-claim policy, process/log cleanup owner, verification gate, and shared goal-state path. After contract confirmation or explicit window start, send no blocking questions during it.
 
-Treat the stated period as an instruction to keep pursuing the active goal rather than to end at the first recoverable failure. Use a supported native Codex schedule or an external scheduler to launch bounded, stateful jobs during that window, following Scheduled follow-ups above. The skill itself does not create a daemon or timer. Prevent overlapping jobs from acting on the same mutable target unless concurrency is explicitly safe. Each job records its scheduler/job id, claims one round with a time-bounded lease, rebuilds the compact round packet, and starts from the last accepted checkpoint rather than from an earlier executor claim. A later job may reclaim a stale lease only after checking that its process or external action is no longer active.
+Keep pursuing the goal through recoverable failures during the window. Follow Scheduled follow-ups to launch bounded, stateful jobs through a supported native or external scheduler; the skill creates no timer. Prevent overlap on mutable targets unless concurrency is explicitly safe. Each job records its scheduler/job id, claims a round with a time-bounded lease, rebuilds the round packet, and resumes the accepted checkpoint, not executor claims. Reclaim a stale lease only after verifying its process or external action is inactive.
 
-Each unattended job must read the state and first inspect the current browser, process, service, or remote state. After a failure, record the failed hypothesis and try the next materially different safe diagnostic or recovery action in that job. For browser work, examples include rechecking extension connectivity, listing/selecting available tabs, opening a fresh tab, waiting for page readiness, inspecting console/network evidence, and revisiting the relevant authenticated route. Do not repeat an unchanged failed action or stop solely because one page navigation, selector, or process start failed.
+Each job first reads goal state and inspects the current browser, process, service, or remote state. After failure, record the hypothesis and try a materially different safe diagnostic or recovery within that job. Browser options include connectivity checks, tab selection or creation, readiness waits, console/network evidence, and revisiting authenticated routes. Never retry unchanged or stop solely over one failed navigation, selector, or process start.
 
-Do not ask the user for routine implementation choices during the window when they can be discovered from existing resources or resolved with an already-authorized safe default. For a genuine external prerequisite—such as interactive sign-in, unavailable credentials, multifactor approval, a payment confirmation, or a product decision—do not fabricate an answer or wait inside a job. Record the exact evidence and minimum unblocking action, continue any independent safe work, and let later jobs revalidate the prerequisite until the window ends. Never bypass authentication, fabricate credentials, accept payment terms, or create a charge merely to avoid waiting.
+Resolve routine choices from available resources or authorized safe defaults. For external prerequisites—interactive sign-in, missing credentials, multifactor approval, payment confirmation, or product decisions—never fabricate answers or wait inside a job. Record exact evidence and the minimum unblocking action, continue independent safe work, and let later jobs revalidate until window end. Never bypass authentication, fabricate credentials, accept payment terms, or create charges to avoid waiting.
 
-At the end of an unattended window, report the accepted changes, objective-gate evidence, failed and recovered attempts, any remaining external prerequisite, and the next scheduled or user action. Mark a goal blocked only under the normal repeated-blocker policy; an unavailable user during an explicitly requested unattended window is not a reason to abandon safe exploration.
+At window end, report accepted changes, objective-gate evidence, failed and recovered attempts, remaining external prerequisites, and the next scheduled or user action. Follow the normal repeated-blocker policy; user absence during an authorized window is no reason to abandon safe exploration.
 
 ## Evidence-driven self-evolution
 
@@ -161,11 +155,11 @@ For every cycle:
 
 ## Final-deliverable ownership
 
-When the user states the final deliverable, treat it as the agent's execution mandate. The user need not prescribe intermediate attempts, diagnostics, or repairs. Convert the deliverable into a done condition and objective gate, retain it in the goal state, and keep working toward it while a safe, authorized, evidence-backed next action remains.
+Treat the stated deliverable as the execution mandate, including intermediate diagnostics and repairs. Record its done condition and objective gate in goal state; continue while a safe, authorized, evidence-backed next action remains.
 
-An unsuccessful action is an **iteration result**, not a terminal response, when its evidence exposes a credible next action. Before taking that action, record the failed hypothesis and evidence; then choose an action that is materially different from the failed one and that either improves the objective or distinguishes between competing causes. Run the relevant objective gate after every repair. Do not ask the user to select ordinary implementation details that can be discovered or safely inferred.
+Failure is an **iteration result** when evidence exposes a credible next action. Record the failed hypothesis and evidence, then choose a materially different action that improves the objective or distinguishes causes. Re-run the objective gate after every repair. Discover or safely infer ordinary implementation details.
 
-Before reporting final status, check the goal state for an untried, safe, authorized action with a credible path to the done condition. If one exists, take it instead of ending on the failure. Conclude only when one of these conditions holds:
+Before final status, check goal state for an untried, safe, authorized action with a credible path to completion; take it if one exists. Conclude only when:
 
 - **Complete:** the final deliverable exists and fresh objective-gate evidence proves its done condition.
 - **Blocked:** progress requires a genuine external prerequisite and the host's repeated-blocker threshold across goal turns is satisfied. Report the exact evidence, attempts, minimum unblocking action, and any independently configured schedule. A bounded scheduled job may end as waiting without claiming the goal is achieved; subsequent goal-status updates still follow the host policy.
@@ -177,28 +171,28 @@ After each material failure or recovery, decide whether it exposed a reusable in
 
 ## Managed process recovery
 
-When the goal starts a local long-running process such as a watcher, dev server, build, or test runner, the agent owns its lifecycle until the goal ends. Do not wait for the user to notice a failed start.
+Own the lifecycle of local long-running processes started for the goal—watchers, servers, builds, or test runners—until it ends. Detect failed starts without waiting for the user.
 
-For every managed process, retain its command, working directory, session/process handle, log path, expected readiness signal, and start time in the goal state. On each relevant cycle, inspect the handle plus an objective readiness signal (for example a listening port, health endpoint, build-complete log entry, or expected artifact).
+Record each process's command, working directory, session/process handle, log path, readiness signal, and start time in goal state. Each relevant cycle, inspect its handle and objective readiness: listening port, health endpoint, build-complete log, or expected artifact.
 
-If it is not ready, diagnose before retrying: inspect stdout/stderr, exit code, process tree, dependency/tool availability, configuration, and the smallest relevant network or credential check. Apply a safe, evidence-supported repair, then re-run the readiness gate. Do not repeat the same start command unchanged after a known failure.
+If unready, diagnose stdout/stderr, exit code, process tree, dependencies/tools, configuration, and the smallest relevant network or credential check. Apply an evidence-supported safe repair and re-run readiness; never repeat a known failed start unchanged.
 
-Escalate to the user only when recovery requires credentials, organization membership, a destructive action, external approval, or a product decision. Record the diagnosis, attempted repair, and result in the iteration log. A process merely existing is never proof that it is ready.
+Escalate recovery only for credentials, organization membership, destructive actions, external approval, or product decisions. Log diagnosis, repair, and result. Process existence never proves readiness.
 
 ### Recovery capture and promotion
 
-When a changed recovery action improves a managed-process gate, add a **provisional recovery record** to the current goal state before continuing. Record only facts: trigger, failed command or action, observed error, exact changed action, readiness evidence, scope/preconditions, and rollback condition. This preserves the usable method for the current goal without claiming that one run establishes a universal rule.
+When recovery improves a managed-process gate, first add a **provisional recovery record** to goal state: trigger, failed command/action, observed error, exact changed action, readiness evidence, scope/preconditions, and rollback condition. One run preserves a usable method, not a universal rule.
 
-Promote that record to a validated lesson only after a later cycle or independent run applies the changed method and passes the same objective gate. If the method is a stable operational invariant needed by later users, then update the relevant skill or reference with the trigger, exact change, evidence, and rollback condition. Keep one-off tool quirks task-local; do not update a reusable skill merely because a recovery happened once.
+Promote recovery only after a later cycle or independent run applies the method and passes the same gate. For a stable operational invariant needed by later users, update the relevant skill/reference with trigger, exact change, evidence, and rollback condition. Keep one-off quirks task-local.
 
 Finish only when the done condition and fresh gate evidence both hold. If the same external blocker persists across the required consecutive goal turns, follow Codex's blocked-goal policy. Escalate immediately for missing authority, credentials, risky external actions, or a decision that requires human judgment; escalation does not waive the host's blocked-status threshold.
 
 ## Candidate improvement and selection
 
-Use multiple candidate versions only when output quality is subjective, the alternatives are independent, and a comparison rubric can be stated. Keep an accepted baseline. For each candidate, apply the same gate and score against the user’s criteria; select the highest-scoring candidate that passes required gates. Do not use self-voting as a substitute for an objective gate, and do not generate candidates that would exceed a user-supplied budget.
+Use multiple candidates only for subjective quality, independent alternatives, and an explicit comparison rubric. Keep an accepted baseline. Apply the same gate and user criteria to each; select the highest-scoring passing candidate. Self-voting cannot replace objective gates; candidate generation must respect user budgets.
 
-For code, prefer one implementation plus an independent reviewer or verifier when available. For writing, design, or plans, compare at most the number of alternatives the user requests; otherwise use two only when the expected benefit justifies the added work.
+For code, prefer one implementation with an independent reviewer/verifier when available. For writing, design, or plans, respect the requested candidate limit; otherwise use two only if their benefit justifies the work.
 
 ## Boundaries
 
-This skill is invoked as `$goal-loop-runner`. It does not add a native `/loop` command, a background daemon, or a timer. Recurring unattended execution needs a verified native Codex schedule or external scheduler that starts bounded jobs with the same goal contract and accessible state path. Loading this skill or its scheduling reference does not itself enable recurrence.
+Invoke as `$goal-loop-runner`; it adds no native `/loop`, daemon, or timer. Recurrence requires a verified native Codex schedule or external scheduler launching bounded jobs with the same contract and accessible state path. Loading the skill or scheduling reference does not enable recurrence.
