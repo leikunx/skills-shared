@@ -56,14 +56,14 @@ Before the first substantive action, establish:
 
 - **Objective:** preserve the active Codex goal if present; otherwise state a concise proposed objective.
 - **Done condition:** a concrete result plus an objective gate wherever possible.
-- **State file:** use the user-named path; otherwise `.codex/goals/<goal-slug>/STATE.md` in the task workspace. Never reuse a state file belonging to another objective.
+- **State file:** honor a user-named path. When private Goal Memory is configured, run its `locate --project <current-project> --slug <goal-slug>` and use the returned canonical STATE.md/evolution.json paths under the private repository. Otherwise use `.codex/goals/<goal-slug>/STATE.md` in the task workspace and record that cross-machine memory is unavailable. Never create two authoritative copies or reuse another objective’s state.
 - **Limits:** attempts, duration, cost/token budget when supplied, and approval boundaries.
 
 Create the state file from [the state template](references/state-template.md) when needed. At the start of each iteration, read it and the applicable project instructions. At the end, record only facts: action, outcome, evidence, blockers, and the next action.
 
 ## Cross-project evolution memory
 
-At goal startup, follow [local Goal Memory](references/goal-memory.md). On every machine, use this skill's bundled `goal_memory_cli.py ensure --project <current-project>` to bootstrap or reuse its private localhost MCP service and configure Codex. Discover Python and the installed skill path locally; never reuse another machine's paths. Register only the current or explicitly authorized projects. If newly configured MCP tools need a fresh session, use the bundled client against the same server during this goal.
+At goal startup, follow [Goal Memory routing](references/goal-memory.md). When available, use `$skills-private:knowledge-setup-goal-memory` to pull and bind the private canonical repository, then run this skill’s compatibility launcher `goal_memory_cli.py ensure --project <current-project>`. Implementation, goal state and reviewed evidence belong in that repository; authentication and rebuildable indexes remain machine-local. Discover paths locally and use `locate` before writing state. Register only current or authorized projects. If the private integration is absent, preserve task-local state and report the memory shortfall; this public skill does not require private repository access to execute a goal. Newly configured MCP tools can use the same endpoint through the CLI immediately.
 
 After establishing the contract and before substantive execution, search by objective, technology, symptoms and constraints, excluding the current goal. Review **3–5 distinct relevant prior goals**, targeting five. Read their lesson details and evidence; record source IDs/revisions, applicability, and `apply`, `reject`, or `test-next` decisions in the new goal's state. Report an actual shortfall without unrelated padding. Recheck relevant lessons when a material failure changes the approach.
 

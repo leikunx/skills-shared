@@ -73,3 +73,11 @@ This log records user-directed operating requirements and reusable improvements 
 - **Evidence:** The existing skill already required evidence-driven iterations and a scheduler for recurring work, but lacked an explicit unattended-window policy or concrete recovery choices for a disconnected browser/session. This user-established requirement fills that operational gap while retaining existing blocked and authorization rules.
 - **Scope:** Applies only when the user explicitly requests unattended pursuit. It does not create a daemon by itself, authorize external mutations, accept charges, or override user authentication.
 - **Rollback condition:** If scheduled jobs create unbounded cost, duplicate work, or repeatedly poll a prerequisite without a credible state change, retain the same state file but lengthen/disable the cadence and narrow the rule to the affected task type after evidence review.
+
+## 2026-09-24 — Private cross-machine memory ownership
+
+- **Trigger:** The user established that goal implementation and reusable goal text should have one private Git source across machines.
+- **Exact change:** Route the optional memory integration to `knowledge-setup-goal-memory`, replace bundled service code with a compatibility launcher, resolve canonical state paths before writing, and preserve task-local fallback when private access is unavailable.
+- **Evidence:** Independent synthetic two-checkout tests verified actual MCP retrieval without original application checkouts, central writes, stable project identity, evidence hashes, stale revision rejection, synchronization and preservation of divergent edits. Follow-up regressions cover malformed records, conflicting IDs, credential checks and portable path names.
+- **Scope:** Goal-memory setup/storage only. No private records or machine mappings enter this shared repository; no prior-task authority or scheduler is inherited.
+- **Rollback condition:** If private routing breaks an environment, retain its existing source records and use explicit local state until setup is repaired. Do not restore a second independently maintained service implementation or overwrite newer goal history.
